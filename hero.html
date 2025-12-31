@@ -1,0 +1,140 @@
+<style>
+        /* CSS Variables */
+        :root {
+            /* Default: SAKURA NIGHT (Solid Dark) */
+            --bg-color: #120C16;      /* Deep Matte Plum */
+            --bg-image: none;         /* No gradient for night */
+            
+            --panel-color: #1B1320;   /* Dark Mauve Card */
+            --border-color: #442a3b;  /* Muted Wine Border */
+            --accent-color: #8a4b6a;  /* Dark Raspberry */
+            --highlight-color: #EBCAD8; /* Pale Sakura Pink */
+            --text-color: #EBCAD8;      /* Pale Pink Text */
+            --muted-color: #947C8C;   /* Muted Lavender */
+            --dark-text: #3D212E;     /* Dark Text for "VIBE" */
+            
+            --overlay-opacity: 0.05;
+            --shadow-color: rgba(0,0,0,0.5);
+        }
+
+        /* Cream Day Theme */
+        [data-theme="day"] {
+            --bg-color: #FFEFCB;      
+            /* Explicit Gradient for Day Mode */
+            --bg-image: linear-gradient(135deg, #FFFDE7 0%, #FFEFCB 50%, #FADCD5 100%);
+            
+            --panel-color: rgba(255, 253, 231, 0.95);   
+            --border-color: #CFB284;  
+            --accent-color: #DFCAA0;  
+            --highlight-color: #5D4037; 
+            --text-color: #5D4037;      
+            --muted-color: #8D6E63;   
+            --dark-text: #8D6E63;
+            
+            --overlay-opacity: 0.05;   
+            --shadow-color: rgba(207, 178, 132, 0.4); 
+        }
+
+        /* Base Setup */
+        body {
+            background-color: #120C16; /* Hard fallback to dark */
+            background-color: var(--bg-color);
+            background-image: var(--bg-image);
+            color: var(--text-color);
+            font-family: 'Space Mono', monospace;
+            overflow-x: hidden;
+            margin: 0;
+            padding: 0;
+            transition: background-color 0.5s ease, color 0.3s ease;
+            background-attachment: fixed;
+            background-size: cover;
+        }
+
+        /* Overlays */
+        .theme-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+            opacity: var(--overlay-opacity);
+            pointer-events: none; z-index: 0;
+            mix-blend-mode: overlay;
+        }
+        .crt-lines {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%);
+            background-size: 100% 4px;
+            pointer-events: none; z-index: 1; opacity: 0.2;
+        }
+
+        /* Retro Card */
+        .retro-card {
+            background: var(--panel-color);
+            opacity: 1;
+            backdrop-filter: none;
+            border: 2px solid var(--border-color);
+            box-shadow: 0 0 0 1px rgba(0,0,0,0.2);
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .retro-card:hover {
+            border-color: var(--highlight-color);
+            box-shadow: 0 0 15px var(--accent-color);
+            transform: translateY(-2px);
+        }
+
+        /* Flashcard Flip Classes */
+        .perspective-1000 { perspective: 1000px; }
+        .transform-style-3d { transform-style: preserve-3d; }
+        .backface-hidden { backface-visibility: hidden; }
+        .rotate-y-180 { transform: rotateY(180deg); }
+        .flip-card-inner { transition: transform 0.6s; transform-style: preserve-3d; }
+        .flip-card.flipped .flip-card-inner { transform: rotateY(180deg); }
+
+        /* Utility */
+        .font-pixel { font-family: 'VT323', monospace; letter-spacing: 1px; }
+        ::-webkit-scrollbar { width: 10px; }
+        ::-webkit-scrollbar-track { background: var(--bg-color); border-left: 1px solid var(--border-color); }
+        ::-webkit-scrollbar-thumb { background: var(--accent-color); border: 1px solid var(--highlight-color); }
+        ::-webkit-scrollbar-thumb:hover { background: var(--highlight-color); }
+        .hidden-page { display: none; }
+        input:focus, textarea:focus { outline: none; border-color: var(--highlight-color); box-shadow: 0 0 8px var(--border-color); background-color: var(--bg-color); color: var(--text-color); }
+        .text-glow { text-shadow: 0 0 10px var(--accent-color); }
+        
+        .text-hollow-dark {
+            color: var(--dark-text);
+            font-weight: bold;
+            text-shadow: 1px 1px 0px var(--border-color);
+        }
+
+        /* Chat Typing Animation */
+        .typing-dot { animation: typing 1.4s infinite ease-in-out both; display: inline-block; margin: 0 1px; }
+        .typing-dot:nth-child(1) { animation-delay: -0.32s; }
+        .typing-dot:nth-child(2) { animation-delay: -0.16s; }
+        @keyframes typing { 0%, 80%, 100% { transform: scale(0); opacity: 0.5; } 40% { transform: scale(1); opacity: 1; } }
+
+        /* Calendar Input Styling */
+        input[type="date"], input[type="number"] { color-scheme: light dark; }
+    </style>
+    <div id="home" class="container mx-auto max-w-6xl animate-fade-in">
+            <div class="grid md:grid-cols-2 gap-12 items-start min-h-[70vh]">
+                <!-- Left: Main Hero -->
+                <div class="retro-card p-10 space-y-6 self-center">
+                    <div class="inline-block px-3 py-1 border border-lofi-highlight/30 text-lofi-highlight font-pixel text-lg bg-lofi-highlight/5">
+                        🌸 SYSTEM STATUS: ONLINE
+                    </div>
+                    <h1 class="font-pixel text-8xl leading-none text-lofi-highlight text-glow">
+                        FOCUS <br> 
+                        <span class="text-hollow-dark">VIBE</span> <br> 
+                        SUCCEED
+                    </h1>
+                    <p class="text-lg text-lofi-highlight/90 leading-relaxed font-light max-w-md">
+                        The ultimate study companion. Curated lofi beats, distraction-free tools, and energy snacks delivered to your door.
+                    </p>
+                    <div class="flex gap-4 pt-6 font-pixel text-2xl">
+                        <button onclick="router('dashboard')" class="bg-lofi-highlight text-lofi-bg px-8 py-3 hover:bg-[var(--accent-color)] hover:text-white transition-colors font-bold tracking-wider">
+                            ENTER STATION
+                        </button>
+                        <button onclick="router('shop')" class="border border-lofi-highlight text-lofi-highlight px-8 py-3 hover:bg-lofi-highlight/10 transition-colors">
+                            GET FUEL
+                        </button>
+                    </div>
+                </div>
